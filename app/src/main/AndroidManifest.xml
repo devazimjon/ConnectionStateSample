@@ -23,6 +23,9 @@
         <activity
             android:name=".ui.SecondActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.LiveDataActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

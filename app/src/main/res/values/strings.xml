@@ -1,9 +1,14 @@
 <resources>
     <string name="app_name">ConnectionStateSample</string>
     <string name="go_to_second_activity">Go to Second Activity</string>
+
     <string name="first_activity">First Activity!</string>
     <string name="second_activity">Second Activity!</string>
     <string name="no_connection">No connection</string>
     <string name="settings_message">Please enable network for further using of the app</string>
     <string name="go_settings">Network settings</string>
+
+    <string name="go_to_live_data_activity">Go to LiveData Activity</string>
+    <string name="online">Connected to network</string>
+    <string name="offline">Disconnected</string>
 </resources>
