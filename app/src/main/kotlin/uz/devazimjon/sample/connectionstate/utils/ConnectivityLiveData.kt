@@ -8,6 +8,12 @@ import android.net.Network
 import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.net.NetworkRequest
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import uz.devazimjon.sample.connectionstate.utils.delegate.checkNetworkHasConnection
 
 class ConnectivityLiveData(context: Context) : LiveData<Boolean>() {
     private val activeConnections = mutableSetOf<Network>()
@@ -36,11 +42,18 @@ class ConnectivityLiveData(context: Context) : LiveData<Boolean>() {
         networkCallback = object : NetworkCallback() {
             override fun onAvailable(network: Network) {
                 val capabilities = cm.getNetworkCapabilities(network)
-                val hasConnection = capabilities?.hasCapability(NET_CAPABILITY_INTERNET)
-                if (hasConnection == true) {
-                    activeConnections.add(network)
+                val hasInternetCapability = capabilities?.hasCapability(NET_CAPABILITY_INTERNET)
+                if (hasInternetCapability == true) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val hasConnection = checkNetworkHasConnection()
+                        if (hasConnection) {
+                            withContext(Dispatchers.Main) {
+                                activeConnections.add(network)
+                                checkActiveNetworks()
+                            }
+                        }
+                    }
                 }
-                checkActiveNetworks()
             }
 
             override fun onLost(network: Network) {
